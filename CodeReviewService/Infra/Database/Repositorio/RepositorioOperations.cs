@@ -1,4 +1,5 @@
 ﻿using CodeReviewService.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,12 +8,14 @@ using System.Text;
 
 namespace CodeReviewService.Infra.Database.Repositorio
 {
-    class RepositorioOperations : IRepositorioOperations
+    public class RepositorioOperations : IRepositorioOperations
     {
         private readonly string connString;
+        private readonly ILogger<RepositorioOperations> logger;
 
-        public RepositorioOperations()
+        public RepositorioOperations(ILogger<RepositorioOperations> logger)
         {
+            this.logger = logger;
             connString = Criptografia.Decrypt(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
         }
 
@@ -45,6 +48,7 @@ namespace CodeReviewService.Infra.Database.Repositorio
             catch (Exception e)
             {
                 Console.WriteLine("ERRO AO PEGAR REPOSITORIOS\n" + e.Message);
+                logger.LogWarning("ERRO AO PEGAR REPOSITORIOS\n" + e.Message);
             }
             finally
             {
@@ -83,6 +87,7 @@ namespace CodeReviewService.Infra.Database.Repositorio
             catch (Exception e)
             {
                 Console.WriteLine("ERRO AO PEGAR BRANCHS PARA ANALISE DO REPOSITORIO: " + repoName + "\n" + e.Message);
+                logger.LogWarning("ERRO AO PEGAR BRANCHS PARA ANALISE DO REPOSITORIO: " + repoName + "\n" + e.Message);
             }
             finally
             {
@@ -120,8 +125,9 @@ namespace CodeReviewService.Infra.Database.Repositorio
 
                 return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogWarning("ERRO IN REPOSITORY EXIST :" + e.Message);
                 return false;
             }
             finally

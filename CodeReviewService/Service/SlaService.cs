@@ -1,4 +1,5 @@
 ﻿using CodeReviewService.Infra.Database.Sla;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Service
 {
-    class SlaService
+    public class SlaService
     {
         private readonly ISlaOperations slaOperations;
         private readonly RepositorioService repositorioService;
+        private readonly ILogger<SlaService> logger;
 
-        public SlaService(RepositorioService repositorio)
+        public SlaService(RepositorioService repositorio, SlaOperations slaOperations, ILogger<SlaService> logger)
         {
-            slaOperations = new SlaOperations();
+            this.logger = logger;
+            this.slaOperations = slaOperations;
             repositorioService = repositorio;
         }
 
@@ -30,6 +33,7 @@ namespace CodeReviewService.Service
             catch (Exception e)
             {
                 Console.WriteLine("ERROR : " + e.Message);
+                logger.LogWarning("ERROR --> " + e.Message);
                 return DateTime.Now;
             }
         }

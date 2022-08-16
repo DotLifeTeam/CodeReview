@@ -2,7 +2,7 @@
 
 namespace CodeReviewService.Models
 {
-    class BaseEmailConfig
+    public class BaseEmailConfig
     {
         public string Usuario { get; set; }
         public string Senha { get; set; }

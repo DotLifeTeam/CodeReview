@@ -3,7 +3,7 @@
 
 namespace CodeReviewService.Models
 {
-    class Commit
+    public class Commit
     {
         public string IdCommit { get; set; }
         public string Nm_mensagem { get; set; }

@@ -66,9 +66,13 @@ BEGIN
 	CREATE TABLE [dbo].[tbFeedback](
 		[Id_feedback] [int] IDENTITY(1,1) NOT NULL,
 		[Id_commit] [varchar](50) NOT NULL,
-		[Status_resposta] [varchar](50) NOT NULL,
+		[Status_resposta] [varchar](50),
 		[Mensagem_feedback][varchar](700),
+		[Dt_registro][datetime] NOT NULL,
+		[Dt_feedback][datetime],
+		[Id_branch][int] not null
 		PRIMARY KEY(Id_feedback)
+		FOREIGN KEY (Id_branch) references tbBranch(Id_branch)
 	)
 	
 END

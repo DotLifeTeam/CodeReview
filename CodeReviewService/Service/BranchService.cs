@@ -1,4 +1,5 @@
 ﻿using CodeReviewService.Infra.Database.Branch;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Service
 {
-    class BranchService
+    public class BranchService
     {
         private readonly IBranchOperations branchOperations;
         private readonly RepositorioService repositorioService;
+        private readonly ILogger<BranchService> logger;
 
-        public BranchService(RepositorioService repositorio)
+        public BranchService(RepositorioService repositorio, BranchOperations branchOperations, ILogger<BranchService> logger)
         {
-            branchOperations = new BranchOperations();
+            this.logger = logger;
+            this.branchOperations = branchOperations;
             repositorioService = repositorio;
         }
 
@@ -36,6 +39,7 @@ namespace CodeReviewService.Service
             catch (Exception e)
             {
                 Console.WriteLine("ERROR : " + e.Message);
+                logger.LogWarning("ERROR : " + e.Message);
                 return -1;
             }
         }
@@ -57,6 +61,7 @@ namespace CodeReviewService.Service
             catch (Exception e)
             {
                 Console.WriteLine("ERROR : " + e.Message);
+                logger.LogWarning("ERROR : " + e.Message);
                 return (null, null);
             }
 

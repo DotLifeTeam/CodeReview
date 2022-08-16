@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -8,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Infra.Database.Branch
 {
-    class BranchOperations : IBranchOperations
+    public class BranchOperations : IBranchOperations
     {
         private readonly string connString;
+        private readonly ILogger<BranchOperations> logger;
 
-        public BranchOperations()
+        public BranchOperations(ILogger<BranchOperations> logger)
         {
+            this.logger = logger;
             connString = Criptografia.Decrypt(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
         }
 
@@ -46,6 +49,7 @@ namespace CodeReviewService.Infra.Database.Branch
             }
             catch (Exception e)
             {
+                logger.LogWarning("ERRO AO PEGAR ID DA BRANCH" + nmBranch + "\n" + e.Message);
                 Console.WriteLine("ERRO AO PEGAR ID DA BRANCH" + nmBranch + "\n" + e.Message);
             }
             finally
@@ -86,6 +90,7 @@ namespace CodeReviewService.Infra.Database.Branch
             }
             catch (Exception e)
             {
+                logger.LogWarning("ERRO AO PEGAR EMAILS DO DEV OU RESPONSAVEL PELA REVISÃO\n" + e.Message);
                 Console.WriteLine("ERRO AO PEGAR EMAILS DO DEV OU RESPONSAVEL PELA REVISÃO\n" + e.Message);
             }
             finally
@@ -122,8 +127,9 @@ namespace CodeReviewService.Infra.Database.Branch
 
                 return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogWarning("ERRO EM BRANCH EXIST : " + e.Message);
                 return false;
             }
             finally
@@ -158,8 +164,9 @@ namespace CodeReviewService.Infra.Database.Branch
 
                 return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogWarning("ERRO EM BRANCH EXIST : " + e.Message);
                 return false;
             }
             finally

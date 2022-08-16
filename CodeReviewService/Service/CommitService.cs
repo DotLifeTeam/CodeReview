@@ -1,4 +1,5 @@
 ﻿using CodeReviewService.Infra.Database.Commit;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Service
 {
-    class CommitService
+    public class CommitService
     {
         private readonly ICommitOperations commitOperations;
         private readonly RepositorioService repositorioService;
         private readonly BranchService branchService;
+        private readonly ILogger<CommitService> logger;
 
-        public CommitService(RepositorioService repositorio, BranchService branch)
+        public CommitService(RepositorioService repositorio, BranchService branch, CommitOperations commitOperations, ILogger<CommitService> logger)
         {
-            commitOperations = new CommitOperations();
+            this.logger = logger;
+            this.commitOperations = commitOperations;
             repositorioService = repositorio;
             branchService = branch;
         }
@@ -35,6 +38,7 @@ namespace CodeReviewService.Service
             catch (Exception e)
             {
                 Console.WriteLine("ERROR : " + e.Message);
+                logger.LogWarning("ERROR : " + e.Message);
                 return (DateTime.Now, null);
             }
         }
@@ -61,6 +65,7 @@ namespace CodeReviewService.Service
             catch (Exception e)
             {
                 Console.WriteLine("ERROR : " + e.Message);
+                logger.LogWarning("ERROR : " + e.Message);
                 return;
             }
         }
@@ -86,6 +91,7 @@ namespace CodeReviewService.Service
             catch (Exception e)
             {
                 Console.WriteLine("ERROR : " + e.Message);
+                logger.LogWarning("ERROR : " + e.Message);
                 return;
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Api_CodeReview.Context;
 using Api_CodeReview.Models;
 using Api_CodeReview.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,17 @@ namespace Api_CodeReview.Repository
             _context = context;
         }
 
+        public FeedbackCommit GetByIdCommit(string idCommit)
+        {
+            return _context.FeedbackCommits.AsNoTracking().FirstOrDefault(x => x.Id_Commit == idCommit);
+        }
+
         public bool FeedbackExist(string idCommit)
         {
             try
             {
-                if (_context.FeedbackCommits.Any(x => x.Id_Commit == idCommit))
-                    return true;
+                if (_context.FeedbackCommits.Any(x => x.Id_Commit == idCommit && x.Status_resposta != null))
+                     return true;
 
                 return false;
             }
@@ -32,11 +38,9 @@ namespace Api_CodeReview.Repository
             }
         }
 
-        public void PostFeedback(FeedbackCommit feedbackCommit)
+        public void SaveFeedback(FeedbackCommit feedbackCommit)
         {
-
-            _context.Entry(feedbackCommit).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-            _context.FeedbackCommits.Add(feedbackCommit);
+            _context.Entry(feedbackCommit).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Models
 {
-    class BaseEmail
+    public class BaseEmail
     {
         public bool IsHtml { get; set; }
         public string Conteudo { get; set; }

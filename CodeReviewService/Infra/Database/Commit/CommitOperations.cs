@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -8,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Infra.Database.Commit
 {
-    class CommitOperations : ICommitOperations
+    public class CommitOperations : ICommitOperations
     {
         private readonly string connString;
+        private readonly ILogger<CommitOperations> logger;
 
-        public CommitOperations()
+        public CommitOperations(ILogger<CommitOperations> logger)
         {
+            this.logger = logger;
             connString = Criptografia.Decrypt(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
         }
 
@@ -52,6 +55,7 @@ namespace CodeReviewService.Infra.Database.Commit
             catch (Exception e)
             {
                 Console.WriteLine("ERRO AO PEGAR DATA ULTIMO COMMIT DA BRANCH: " + branchName + "\n" + e.Message);
+                logger.LogWarning("ERRO AO PEGAR DATA ULTIMO COMMIT DA BRANCH: " + branchName + "\n" + e.Message);
             }
             finally
             {
@@ -88,6 +92,7 @@ namespace CodeReviewService.Infra.Database.Commit
             }
             catch (Exception e)
             {
+                logger.LogWarning("ERRO AO INSERIR UM NOVO ULTIMO COMMIT\n" + e.Message);
                 Console.WriteLine("ERRO AO INSERIR UM NOVO ULTIMO COMMIT\n" + e.Message);
             }
             finally
@@ -130,6 +135,7 @@ namespace CodeReviewService.Infra.Database.Commit
             }
             catch (Exception e)
             {
+                logger.LogWarning("ERRO AO DAR UPDATE NO ULTIMO COMMIT --> " + oldIdCommit + "\n" + e.Message);
                 Console.WriteLine("ERRO AO DAR UPDATE NO ULTIMO COMMIT --> " + oldIdCommit + "\n" + e.Message);
             }
             finally
@@ -164,8 +170,9 @@ namespace CodeReviewService.Infra.Database.Commit
 
                 return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogWarning("ERRO EM COMMIT EXIST :" + e.Message);
                 return false;
             }
             finally

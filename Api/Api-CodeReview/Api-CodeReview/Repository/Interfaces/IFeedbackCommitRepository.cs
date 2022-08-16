@@ -8,7 +8,8 @@ namespace Api_CodeReview.Repository.Interfaces
 {
     interface IFeedbackCommitRepository
     {
-        void PostFeedback(FeedbackCommit feedbackCommit);
+        FeedbackCommit GetByIdCommit(string idCommit);
+        void SaveFeedback(FeedbackCommit feedbackCommit);
         bool FeedbackExist(string idCommit);
     }
 }

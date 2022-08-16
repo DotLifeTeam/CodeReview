@@ -31,13 +31,12 @@ namespace Api_CodeReview.Service
             if (feedback is null)
                 feedback = string.Empty;
 
-            FeedbackCommit feedbackCommit = new();
-            feedbackCommit.Id_Commit = idCommit.Trim();
+            FeedbackCommit feedbackCommit = repository.GetByIdCommit(idCommit);
             feedbackCommit.Status_resposta = status_resposta;
-            feedbackCommit.Mensagem_feedback = feedback?.Trim();
-            feedbackCommit.Id_feedback = 0;
+            feedbackCommit.Mensagem_feedback = feedback;
+            feedbackCommit.Dt_feedback = DateTime.Now;
 
-            repository.PostFeedback(feedbackCommit);
+            repository.SaveFeedback(feedbackCommit);
         }
         public bool FeedbackExist(string idCommit)
         {

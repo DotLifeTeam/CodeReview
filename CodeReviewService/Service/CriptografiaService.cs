@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Service
 {
-    class CriptografiaService
+    public class CriptografiaService
     {
         public static string Encrypt(string input)
         {

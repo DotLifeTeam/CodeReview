@@ -18,11 +18,18 @@ namespace Api_CodeReview.Models
         [StringLength(50, MinimumLength = 10)]
         public string Id_Commit { get; set; }
 
-        [Required]
         [StringLength(50, MinimumLength = 5)]
         public string Status_resposta { get; set; }
 
         [StringLength(700, MinimumLength = 0)]
         public string Mensagem_feedback { get; set; }
+
+        [Required]
+        public DateTime Dt_registro { get; set; }
+        
+        public DateTime Dt_feedback { get; set; }
+
+        [Required]
+        public int Id_branch { get; set; }
     }
 }

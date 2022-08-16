@@ -1,6 +1,6 @@
 ﻿namespace CodeReviewService.Models
 {
-    class CloneConfig
+    public class CloneConfig
     {
         public string Url { get; set; }
         public string Username { get; set; }

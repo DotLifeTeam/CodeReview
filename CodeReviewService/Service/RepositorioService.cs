@@ -1,4 +1,5 @@
 ﻿using CodeReviewService.Infra.Database.Repositorio;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace CodeReviewService.Service
 {
-    class RepositorioService
+    public class RepositorioService
     {
         private readonly IRepositorioOperations repositorioOperations;
+        private readonly ILogger<RepositorioService> logger;
 
-        public RepositorioService()
+        public RepositorioService(RepositorioOperations repositorioOperations, ILogger<RepositorioService> logger)
         {
-            repositorioOperations = new RepositorioOperations();
+            this.logger = logger;
+            this.repositorioOperations = repositorioOperations;
         }
 
         public List<Models.CloneConfig> GetRepositoriesData()
@@ -32,6 +35,7 @@ namespace CodeReviewService.Service
             catch (Exception e)
             {
                 Console.WriteLine("ERROR :" + e.Message);
+                logger.LogWarning("ERROR --> " + e.Message);
                 return new();
             }
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CodeReviewService.Application;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,11 @@ namespace CodeReviewService.Util
 {
     class Start
     {
-        public static void StartApp(ILogger logger)
+        public static void StartApp(ILogger logger, GitOperations gitOperations)
         {
             Util.Tools.InitalConfig(logger);
-            Application.EmailOperations emailOperations = new();
+            gitOperations.ReadAllRepos();
 
-            Service.RepositorioService repositorioService = new();
-            Service.BranchService branchService = new(repositorioService);
-            Service.CommitService commitService = new(repositorioService, branchService);
-            Service.SlaService slaService = new(repositorioService);
-
-            Application.GitOperations gitOperations = new(emailOperations, branchService, commitService,
-                slaService, repositorioService);
-
-            gitOperations.ReadAllRepos(logger);
         }
     }
 }
